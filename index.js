@@ -31,7 +31,9 @@ app.post("/test/:formId", async (req, res) => {
 })
 
 
-app.post('/upload/single', uploadStorage.single('file'), function(req, res, next){
+app.post('/upload/single', uploadStorage.single("file"), function(req, res, next){
+    console.log("req:", req.file.fieldname)
+    console.log("req ni body: ", JSON.stringify(req.body))
     console.log(req.file)
     return res.send("Signle file uploaded")
 })
