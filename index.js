@@ -1,5 +1,16 @@
 const express = require("express")
 const bodyParser = require("body-parser")
+const multer = require('multer')
+const storage = multer.diskStorage({
+    destination: (req, file, cb) =>{
+        cb(null, "uploads/")
+    },
+    filename: (req, file, cb) =>{
+        cb(null, Date.now() + "-" + file.originalname)
+    }
+})
+
+const uploadStorage = multer({storage: storage})
 const app = express()
 
 const port = process.env.PORT || 5000
@@ -19,6 +30,11 @@ app.post("/test/:formId", async (req, res) => {
     // res.redirect("http://127.0.0.1:5500/landing.html")
 })
 
+
+app.post('/upload/single', uploadStorage.single('file'), function(req, res, next){
+    console.log(req.file)
+    return res.send("Signle file uploaded")
+})
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
