@@ -1,11 +1,17 @@
+/**
+ * This single file contains all env variable so ,
+ * no need to import dotenv in every file.
+ * @author Birju
+ * @editor Kartik
+ */
 import * as dotenv from 'dotenv'
+dotenv.config()
 
-dotenv.config() // why i need to do this in every single file where i want to use process.env???
-
-export const db = {
+export const environment = {
 	name: process.env.DB_NAME || '',
 	host: process.env.DB_HOST || '',
-	port: process.env.DB_PORT || '',
+	dbPort: process.env.DB_PORT || '',
+	serverPort: parseInt(process.env.SERVER_PORT || 5000),
 	user: process.env.DB_USER || '',
 	password: process.env.DB_USER_PWD || '',
 	minPoolSize: parseInt(process.env.DB_MIN_POOL_SIZE || '5'),

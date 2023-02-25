@@ -1,12 +1,10 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-dotenv.config();
-import { db } from '../config.js';
+import { environment } from '../config.js';
 import { masterDbSchemas } from './schemas/index.js';
 
 // Build the connection string
-const dbURI = `mongodb://${db.user}:${encodeURIComponent(db.password)}@${db.host
-  }:${db.port}`;
+const dbURI = `mongodb://${environment.user}:${encodeURIComponent(environment.password)}@${environment.host
+  }:${environment.dbPort}`;
 
 const mongoOptions = {
   useNewUrlParser: true,
