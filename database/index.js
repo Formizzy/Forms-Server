@@ -5,9 +5,8 @@ import { db } from '../config.js';
 import { masterDbSchemas } from './schemas/index.js';
 
 // Build the connection string
-const dbURI = `mongodb://${db.user}:${encodeURIComponent(db.password)}@${
-  db.host
-}:${db.port}`;
+const dbURI = `mongodb://${db.user}:${encodeURIComponent(db.password)}@${db.host
+  }:${db.port}`;
 
 const mongoOptions = {
   useNewUrlParser: true,
@@ -15,7 +14,6 @@ const mongoOptions = {
   autoIndex: true,
   connectTimeoutMS: 10000,
   socketTimeoutMS: 30000,
-  maxPoolSize: 15
 };
 
 function connectDB() {
@@ -31,11 +29,13 @@ function connectDB() {
     mongoose.set('strictQuery', true);
   });
 }
+const dbConn = await connectDB();
 
 export const switchDB = async (dbName, dbSchema) => {
-  const mongoose = await connectDB();
-  if (mongoose.connection.readyState === 1) {
-    const db = await mongoose.connection.useDb(dbName, { useCache: true });
+  //rename this mongoose to dbConn
+  if (dbConn.connection.readyState === 1) {
+    const db = await dbConn.connection.useDb(dbName, { useCache: true });
+
     // Prevent from schema re-registration
     if (!Object.keys(db.models).length) {
       dbSchema.forEach((schema, modelName) => {
