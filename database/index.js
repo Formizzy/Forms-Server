@@ -15,6 +15,7 @@ const mongoOptions = {
   autoIndex: true,
   connectTimeoutMS: 10000,
   socketTimeoutMS: 30000,
+  maxPoolSize: 15
 };
 
 function connectDB() {

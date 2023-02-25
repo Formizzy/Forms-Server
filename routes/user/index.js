@@ -12,8 +12,6 @@ router.post("/create",async (req, res)=>{
 	let userModel = await getDBModel(db, 'user')
 	let user = userModel({name: name, number: mobile})
 	let result = await user.save()
-	console.log(result._id)
-	console.log(typeof result._id)
 	// below i m changing db just to check if db got created on clustor
 	// so what we can do is once user is created 
 	// use his id to creat other db and use that db to server that respected user
