@@ -4,7 +4,7 @@ import { masterDbSchemas } from './schemas/index.js';
 
 // Build the connection string
 const dbURI = `mongodb://${environment.user}:${encodeURIComponent(environment.password)}@${environment.host
-  }:${environment.dbPort}`;
+  }:${environment.dbPort}/test?authSource=admin&w=1`;
 
 const mongoOptions = {
   useNewUrlParser: true,
@@ -12,6 +12,8 @@ const mongoOptions = {
   autoIndex: true,
   connectTimeoutMS: 10000,
   socketTimeoutMS: 30000,
+  minPoolSize: environment.minPoolSize,
+  maxPoolSize: environment.maxPoolSize
 };
 
 function connectDB() {
@@ -27,7 +29,8 @@ function connectDB() {
     mongoose.set('strictQuery', true);
   });
 }
-const dbConn = await connectDB();
+
+export const dbConn = await connectDB();
 
 export const switchDB = async (dbName, dbSchema) => {
   //rename this mongoose to dbConn

@@ -44,9 +44,9 @@ router.delete("/cleardb", async (req, res) => {
 		res.send("dropped Db");
 	});
 
-	userModel.deleteMany({}, (err) => {
-		console.log("deleted all documents in users collection.");
-	})
+	// userModel.deleteMany({}, (err) => {
+	// 	console.log("deleted all documents in users collection.");
+	// })
 })
 
 export default router;
