@@ -1,8 +1,6 @@
 import { model, Schema, Types } from 'mongoose';
 import Form from './Form';
 
-export const DOCUMENT_NAME = 'User';
-export const COLLECTION_NAME = 'users';
 
 export default interface User {
   _id: Types.ObjectId;
@@ -15,7 +13,7 @@ export default interface User {
   updatedAt?: Date;
 }
 
-const schema = new Schema<User>(
+export const userSchema = new Schema<User>(
   {
     email: {
       type: Schema.Types.String,
@@ -54,5 +52,3 @@ const schema = new Schema<User>(
     },
   },
 );
-
-export const UserModel = model<User>(DOCUMENT_NAME, schema, COLLECTION_NAME);

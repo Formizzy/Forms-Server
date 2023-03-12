@@ -4,7 +4,7 @@ import validator, { ValidationSource } from '../helpers/validator';
 import schema from '../routes/accessFunctionalities/schema';
 import Jwt, { JwtPayload } from 'jsonwebtoken';
 import { secretKey } from '../config';
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { validateTokenData } from './authUtils';
 
 const router = express.Router();
@@ -13,19 +13,21 @@ export default router.use(
   validator(schema.auth, ValidationSource.HEADER),
   async (req : Request, res : Response , next : NextFunction) => {
     const jwtAuthToken = req.headers.authorization;
-    
+    let userIdFromReqQuery = "";
+    if(req.query.id) userIdFromReqQuery = req.query.id.toString();
     try {
-      const payload = Jwt.verify(jwtAuthToken as string, secretKey) as JwtPayload;
-      const isTokenPayloadRight = validateTokenData(payload);
+      const jwtPayload = Jwt.verify(jwtAuthToken as string, secretKey) as JwtPayload;
+      const isTokenPayloadRight = validateTokenData(jwtPayload);
 
       if(!isTokenPayloadRight) throw 'Invalid Access Token';
+      if (jwtPayload._id != userIdFromReqQuery) throw 'Token Does Not Match With User';
 
-      const user = await UserRepo.findById(new Types.ObjectId(payload._id));
+      const user = await UserRepo.findById(jwtPayload._id as mongoose.Types.ObjectId);
       if (!user) throw 'User Not Found';
-
+      
       return next();
-    } catch (e) {
-      throw e;
+    } catch (error) {
+      return res.status(401).json({message : error});
     }
   }
 );

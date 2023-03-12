@@ -1,8 +1,5 @@
 import { model, Schema, Types } from 'mongoose';
 
-export const DOCUMENT_NAME = 'forms';
-export const COLLECTION_NAME = 'forms';
-
 export default interface Form {
   _id: Types.ObjectId;
   formName: string;
@@ -12,7 +9,7 @@ export default interface Form {
   updatedAt?: Date;
 }
 
-const schema = new Schema<Form>(
+export const formSchema = new Schema<Form>(
   {
     formName: {
         type: Schema.Types.String,
@@ -38,5 +35,3 @@ const schema = new Schema<Form>(
     versionKey: false,
   },
 );
-
-export const FormModel = model<Form>(DOCUMENT_NAME, schema, COLLECTION_NAME);
