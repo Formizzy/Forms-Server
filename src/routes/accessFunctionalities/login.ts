@@ -11,22 +11,28 @@ import { createTokens } from "../../auth/authUtils";
 
 const router = express.Router();
 
-router.post('/login', 
-    validator(schema.credential),
-    async (req : Request, res : Response) => {
+router.post('/login',
+  validator(schema.credential),
+  async (req: Request, res: Response) => {
 
-      const user = await UserRepo.findByEmail(req.body.email);
+    const user = await UserRepo.findByEmail(req.body.email);
 
-      if (!user || !user.password) res.status(404).json({ message : 'User Not Registered or Credentials not set properly'});
+    if (!user || !user.password) {
+      res.status(404).json({ message: 'user is not signup' });
+      return;
+    }
 
-      const match = bcrypt.compare(req.body.password, user?.password);
+    const match = bcrypt.compare(req.body.password, user.password);
 
-      if (!match) res.status(404).json({ message : 'User Not Registered or Credentials not set properly'});
+    if (!match) {
+      res.status(404).json({ message: 'password is incorrect' });
+      return;
+    }
 
-      const jwtToken = createTokens(user, secretKey);
+    const jwtToken = createTokens(user, secretKey);
 
-      res.status(201).json({message : "User Logged In....\n", user, accessToken: jwtToken });
-    },
-  );
+    res.status(201).json({ message: "User Logged In....\n", user, accessToken: jwtToken });
+  },
+);
 
 export default router;

@@ -25,12 +25,12 @@ async function findByEmail(email: string): Promise<User | any> {
   const userModel = await getDBModel(materDBConnection,'user');
 
   const result = await userModel?.findOne({ email: email })
-    .select(
-      '+firstName +lastName',
-    )
-    .lean()
-    .exec();
-    return result;
+  .select(
+    '+firstName +lastName +password',
+  )
+  .lean()
+  
+  return result;
 }
 
 
