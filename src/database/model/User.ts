@@ -5,10 +5,10 @@ import Form from './Form';
 export default interface User {
   _id: Types.ObjectId;
   email?: string;
-  password?: string;
-  formIds: Form[];
+  password: string | null;
   firstName: string;
   lastName: string;
+  authMethod: "GOOGLE" | "GITHUB" | "EMAIL";
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -21,16 +21,7 @@ export const userSchema = new Schema<User>(
     },
     password: {
       type: Schema.Types.String,
-      select: "",
-    },
-    formIds: {
-      type: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'Forms',
-        },
-      ],
-      select: false,
+      select: false
     },
     firstName: {
       type: Schema.Types.String,
@@ -39,6 +30,10 @@ export const userSchema = new Schema<User>(
     lastName: {
       type: Schema.Types.String,
       default: "",
+    },
+    authMethod: {
+      type: Schema.Types.String,
+      default: "EMAIL"
     },
     createdAt: {
       type: Schema.Types.Date,
