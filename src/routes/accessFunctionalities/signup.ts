@@ -6,6 +6,8 @@ import schema from "./schema"
 import UserRepo from "../../database/repositories/UserRepo";
 import { secretKey } from "../../config";
 import { createTokens } from "../../auth/authUtils";
+import { userDbSchemas } from "../../database/model/MultiDatabase";
+import { switchDatabases } from "../../database/helpers/switcher";
 
 const router = express.Router();
 
@@ -13,9 +15,10 @@ router.post('/',
 validator(schema.signup),
 async (req: Request, res: Response) => {
   try {
+    
     const { firstName, lastName, email, password } = req.body;
 
-    const userAlreadyExists = await  UserRepo.findByEmail(email);
+    const userAlreadyExists = await UserRepo.findByEmail(email);
 
     //return with 403-Already Exists status code if user already exists
     if(userAlreadyExists) return res.status(403).json({ message : 'User Alredy Exists'});
@@ -40,11 +43,13 @@ async (req: Request, res: Response) => {
 
       const jwtToken = createTokens(user, secretKey);
 
-    // return the user and access token
+      console.log("created user from db ",user)
 
+      await switchDatabases(user._id.toString(), userDbSchemas);
+
+    // return the user and access token
     res.status(201).json({message : "User Registerd Successfully....\n", user, accessToken: jwtToken });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });

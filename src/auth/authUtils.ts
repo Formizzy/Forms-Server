@@ -13,17 +13,16 @@ export const validateTokenData = (payload: JwtPayload): boolean => {
     return true;
   };
 
-  export const createTokens = (
-    user: User,
-    accessTokenKey: string,
-  ): any => {
-    const jwtToken = Jwt.sign(
-      user,
-      accessTokenKey,
-      { expiresIn: '10 days' }
-    );
-    return {
-      accessToken: jwtToken,
-    };
+export const createTokens = (
+  user: User,
+  accessTokenKey: string,
+): any => {
+  const jwtToken = Jwt.sign(
+    user,
+    accessTokenKey,
+    { expiresIn: '10 days' }
+  );
+  return {
+    accessToken: jwtToken,
   };
-  
+};

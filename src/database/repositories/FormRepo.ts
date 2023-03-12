@@ -1,14 +1,17 @@
-import Form, { FormModel } from '../model/Form';
+import { getDBModel } from '../helpers/getModel';
+import { switchDatabases } from '../helpers/switcher';
+import Form from '../model/Form';
+import { userDbSchemas } from '../model/MultiDatabase';
 
-async function createForm(
-  form: Form,
-): Promise<{ form: Form }> {
+export const createForm = async function (form: Form, userDBName : string): Promise<{ form: Form }> {
 
-  const now = new Date();
+  let userDBConnection = await switchDatabases(userDBName, userDbSchemas);
 
-  form.createdAt = form.updatedAt = now;
+  const formModel = await getDBModel(userDBConnection,'form');
+  
+  form.createdAt = form.updatedAt = new Date();
 
-  const createdForm = await FormModel.create(form);
+  const createdForm = await formModel?.create(form);
 
   return {
     form: { ...createdForm.toObject() }

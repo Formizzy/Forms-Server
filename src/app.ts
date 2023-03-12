@@ -1,7 +1,6 @@
 import express from 'express';
 import { Application } from 'express';
 import dotenv from 'dotenv';
-import "./database";  // initialize and connect with database
 import routes from './routes';
 import bodyParser from 'body-parser';
 import cors from 'cors';
