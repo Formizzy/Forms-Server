@@ -24,3 +24,8 @@ export const tokenInfo = {
 
 
 export const secretKey = process.env.SECRET_KEY || "temp_secret_key";
+
+export const googleKeys = {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      secretKey: process.env.GOOGLE_CLIENT_KEY
+}

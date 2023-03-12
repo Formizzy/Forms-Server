@@ -1,6 +1,6 @@
 import app from './app';
-
-app.listen(3000, () => {
-    console.log(`server running on port : ${3000}`);
+import { port } from './config';
+app.listen(port, () => {
+    console.log(`server running on port : ${port}`);
   })
   .on('error', (e : any) => console.log(e));

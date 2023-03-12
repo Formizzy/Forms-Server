@@ -3,8 +3,17 @@ import { Application } from 'express';
 import dotenv from 'dotenv';
 import routes from './routes';
 import bodyParser from 'body-parser';
+import cors from 'cors';
+
+const allowedOrigins = ['*', 'http://localhost:3000'];
+
+const options: cors.CorsOptions = {
+  origin: allowedOrigins
+};
 
 const app: Application = express();
+
+app.use(cors(options))
 
 // body-parser
 app.use(bodyParser.json({ limit: '50mb', type: 'application/json' }));
