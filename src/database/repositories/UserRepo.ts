@@ -19,7 +19,7 @@ async function findByEmail(email: string): Promise<User | any> {
 }
 
 async function createUser(
-  user: User,
+  user: User | any,
 ): Promise<{ user: User }> {
 
   const now = new Date();
