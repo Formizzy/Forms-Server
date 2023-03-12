@@ -15,11 +15,20 @@ router.post('/login',
   validator(schema.credential),
   async (req: Request, res: Response) => {
 
-    const user = await UserRepo.findByEmail(req.body.email);
+    const user: User = await UserRepo.findByEmail(req.body.email);
 
-    if (!user || !user.password) {
+    if (!user) {
       res.status(404).json({ message: 'user is not signup' });
       return;
+    }
+
+    if (user.authMethod === "GOOGLE") {
+      res.status(404).json({ message: 'You were signed up using google.' });
+      return
+    }
+
+    if (!user.password) {
+      throw Error("Password not found from database.")
     }
 
     const match = bcrypt.compare(req.body.password, user.password);
