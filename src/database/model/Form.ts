@@ -15,7 +15,8 @@ export const formSchema = new Schema<Form>(
         type: Schema.Types.String,
     },
     totalSubmissions: {
-        type: Schema.Types.Number
+        type: Schema.Types.Number,
+        default: 0
     },
     endpoint: {
         type: Schema.Types.String

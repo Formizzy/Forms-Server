@@ -13,14 +13,14 @@ export default router.use(
   validator(schema.auth, ValidationSource.HEADER),
   async (req : Request, res : Response , next : NextFunction) => {
     const jwtAuthToken = req.headers.authorization;
-    let userIdFromReqQuery = "";
-    if(req.query.id) userIdFromReqQuery = req.query.id.toString();
+    let userIdFromQuery = "";
+    if(req.query.id) userIdFromQuery = req.query.id.toString();
     try {
       const jwtPayload = Jwt.verify(jwtAuthToken as string, secretKey) as JwtPayload;
       const isTokenPayloadRight = validateTokenData(jwtPayload);
 
       if(!isTokenPayloadRight) throw 'Invalid Access Token';
-      if (jwtPayload._id != userIdFromReqQuery) throw 'Token Does Not Match With User';
+      if (jwtPayload._id.toString() != userIdFromQuery) throw 'Token Does Not Match With User';
 
       const user = await UserRepo.findById(jwtPayload._id as mongoose.Types.ObjectId);
       if (!user) throw 'User Not Found';
