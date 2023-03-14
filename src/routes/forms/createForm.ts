@@ -4,8 +4,6 @@ import schema from "./../forms/schema"
 import authentication from "../../auth/authentication";
 import FormRepo from "../../database/repositories/FormRepo";
 import Form from "../../database/model/Form";
-import { userDbSchemas } from "../../database/model/MultiDatabase";
-import { switchDatabases } from "../../database/helpers/switcher";
 
 const router = express.Router();
 
@@ -19,7 +17,7 @@ router.post('/',
         const { form } = await FormRepo.createForm({
           formName : req.body.formName,
           totalSubmissions : req.body.totalSubmissions,
-          endpoint : req.body.endpoint,
+          endpoint : userId,
         } as Form, userId);
 
         res.status(201).json({ message: "Form Created Successfully\n", form })
