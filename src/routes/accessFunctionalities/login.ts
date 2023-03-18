@@ -11,7 +11,7 @@ import { createTokens } from "../../auth/authUtils";
 
 const router = express.Router();
 
-router.post('/login',
+router.post('/',
   validator(schema.credential),
   async (req: Request, res: Response) => {
 
@@ -38,9 +38,9 @@ router.post('/login',
       return;
     }
 
-    const jwtToken = createTokens(user, secretKey);
+    const jwtToken = createTokens(user._id.toString(), secretKey);
 
-    res.status(201).json({ message: "User Logged In....\n", user, accessToken: jwtToken });
+    res.status(201).json({ message: "User Logged In....\n", user, jwtToken });
   },
 );
 

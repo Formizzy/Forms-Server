@@ -35,7 +35,7 @@ router.post('/',
       const hashedPassword = await bcrypt.hash(password, 10);
 
       // create a new user
-      const { user } = await UserRepo.createUser(
+      const newUser = await UserRepo.createUser(
         {
           email: email,
           password: hashedPassword,
@@ -44,17 +44,16 @@ router.post('/',
           authMethod: "EMAIL"
         } as User,
       );
+      console.log("newUser", newUser)
 
-      const jwtToken = createTokens(user, secretKey);
-
-      console.log("created user from db ", user)
-
-      await switchDatabases(user._id.toString(), userDbSchemas);
+      const jwtToken = createTokens(newUser._id.toString(), secretKey);
+      console.log(jwtToken)
+      await switchDatabases(newUser._id.toString(), userDbSchemas);
 
       // return the user and access token
-      res.status(201).json({ message: "User Registerd Successfully....\n", user, accessToken: jwtToken });
+      res.status(201).json({ message: "User Registerd Successfully....\n", newUser, jwtToken });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
+      res.status(500).json({ message: 'Internal server error', error });
     }
   });
 
