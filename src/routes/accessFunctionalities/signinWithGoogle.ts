@@ -15,21 +15,21 @@ router.post('/signin-with-google',
 			idToken: req.body.user.account.id_token,
 			audience: googleKeys.clientId,
 		});
-		const payload = ticket.getPayload();
+		const googlePayload = ticket.getPayload();
 
-		const email = payload?.email || "";
-		const name = payload?.name || "";
+		const email = googlePayload?.email || "";
+		const name = googlePayload?.name || "";
 
-		const userAlreadyExists = await UserRepo.findByEmail(email);
+		let user: User = await UserRepo.findByEmail(email);
 
-		if (userAlreadyExists) {
-			const jwtToken = createTokens(userAlreadyExists, secretKey);
-			res.status(201).json({ message: "User Signed In....\n", userAlreadyExists, accessToken: jwtToken });
+		if (user) {
+			const jwtToken = createTokens(user._id.toString(), secretKey);
+			res.status(201).json({ message: "User Signed In....\n", userAlreadyExists: user, jwtToken });
 			return;
 		}
 
 		// create a new user
-		const { user } = await UserRepo.createUser(
+		const newUser: User = await UserRepo.createUser(
 			{
 				email: email,
 				firstName: name,
@@ -39,11 +39,11 @@ router.post('/signin-with-google',
 			} as User,
 		);
 
-		const jwtToken = createTokens(user, secretKey);
+		const jwtToken = createTokens(newUser._id.toString(), secretKey);
 
 		// return the user and access token
 
-		res.status(201).send({ message: "User Registerd Successfully....\n", user, accessToken: jwtToken });
+		res.status(201).send({ message: "User Registerd Successfully....\n", user, jwtToken });
 	},
 );
 

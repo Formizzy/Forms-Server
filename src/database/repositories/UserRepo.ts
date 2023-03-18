@@ -6,14 +6,14 @@ import { Types } from 'mongoose';
 
 // // contains critical information of the user
 async function findById(id: Types.ObjectId): Promise<User | any> {
-  
+
   let materDBConnection = await switchDatabases('masterDB', masterDbSchemas);
 
-  const userModel = await getDBModel(materDBConnection,'user');
+  const userModel = await getDBModel(materDBConnection, 'user');
 
   const result = await userModel?.findOne({ _id: id })
-  .lean()
-  .exec();
+    .lean()
+    .exec();
 
   return result;
 }
@@ -22,25 +22,25 @@ async function findByEmail(email: string): Promise<User | any> {
 
   let materDBConnection = await switchDatabases('masterDB', masterDbSchemas);
 
-  const userModel = await getDBModel(materDBConnection,'user');
+  const userModel = await getDBModel(materDBConnection, 'user');
 
   const result = await userModel?.findOne({ email: email })
-  .select(
-    '+firstName +lastName +password',
-  )
-  .lean()
-  
+    .select(
+      '+firstName +lastName +password',
+    )
+    .lean()
+
   return result;
 }
 
 
 async function createUser(
   user: User | any,
-): Promise<{ user: User }> {
+): Promise<User> {
 
   let materDBConnection = await switchDatabases('masterDB', masterDbSchemas);
 
-  const userModel = await getDBModel(materDBConnection,'user');
+  const userModel = await getDBModel(materDBConnection, 'user');
 
   const now = new Date();
 
@@ -48,11 +48,9 @@ async function createUser(
 
   user.createdAt = user.updatedAt = now;
 
-  const createdUser = await userModel?.create(user);
+  const createdUser: User = await userModel?.create(user);
 
-  return {
-    user: { ...createdUser.toObject() }
-  };
+  return createdUser
 }
 
 export default {
