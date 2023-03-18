@@ -29,3 +29,8 @@ export const googleKeys = {
       clientId: process.env.GOOGLE_CLIENT_ID,
       secretKey: process.env.GOOGLE_CLIENT_KEY
 }
+
+export const githubKeys = {
+  clientId: process.env.GITHUB_ID,
+  secretKey: process.env.GITHUB_SECRET
+}
