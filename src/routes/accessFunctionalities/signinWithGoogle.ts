@@ -11,11 +11,11 @@ const router = express.Router();
 
 router.post('/signin-with-google',
 	async (req: Request, res: Response) => {
-		
-		let email = req.body.user.email;
-		let name = req.body.user.name;
 
-		let user: User = await UserRepo.findByEmail(email);
+		const email = req.body.user.email;
+		const name = req.body.user.name;
+
+		const user: User = await UserRepo.findByEmail(email);
 
 		if (user) {
 			const jwtToken = createTokens(user._id.toString(), secretKey);
@@ -23,14 +23,14 @@ router.post('/signin-with-google',
 			return;
 		}
 
-		name = name.split(' ');
+		const elementsFromFullName = name.split(' ');
 
 		// create a new user
-		const newUser: User = await UserRepo.createUser(
+		const newUser : User = await UserRepo.createUser(
 			{
 				email: email,
-				firstName: name[0] ?? null,
-				lastName: name[1] ?? null,
+				firstName: elementsFromFullName[0] ?? "",
+				lastName: elementsFromFullName[1] ?? "",
 				password: null,
 				authMethod: "GOOGLE"
 			} as User,

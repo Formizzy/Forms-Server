@@ -1,3 +1,4 @@
+import { Connection } from 'mongoose';
 import { clearConfigCache } from 'prettier';
 import { getDBModel } from '../helpers/getModel';
 import { switchDatabases } from '../helpers/switcher';
@@ -6,7 +7,7 @@ import { userDbSchemas } from '../model/MultiDatabase';
 
 export const createForm = async function (form: Form, userDBName : string): Promise<{ form: Form }> {
 
-  let userDBConnection = await switchDatabases(userDBName, userDbSchemas);
+  const userDBConnection : Connection = await switchDatabases(userDBName, userDbSchemas);
 
   const userId = userDBName;
 

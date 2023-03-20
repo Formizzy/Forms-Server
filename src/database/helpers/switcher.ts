@@ -1,7 +1,7 @@
 import mongoose, { Connection } from "mongoose";
 import { connectDB } from "./connector";
 
-export const switchDatabases = async function ( dbName : string, dbSchema : Map<String, mongoose.Schema>) : Promise<Connection | undefined>
+export const switchDatabases = async function ( dbName : string, dbSchema : Map<String, mongoose.Schema>) : Promise<Connection | any>
 {
   try {
     const clusterConnection = await connectDB();
