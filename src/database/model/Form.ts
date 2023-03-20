@@ -1,4 +1,4 @@
-import { model, Schema, Types } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 
 export default interface Form {
   _id: Types.ObjectId;
