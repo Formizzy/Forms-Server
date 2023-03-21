@@ -1,4 +1,4 @@
-import * as dotenv  from 'dotenv'
+import * as dotenv from 'dotenv'
 dotenv.config();
 
 export const environment = process.env.NODE_ENV;
@@ -27,7 +27,7 @@ export const secretKey = process.env.SECRET_KEY || "temp_secret_key";
 
 export const googleKeys = {
   clientId: process.env.GOOGLE_CLIENT_ID,
-  secretKey: process.env.GOOGLE_CLIENT_KEY
+  secretKey: process.env.GOOGLE_CLIENT_SECRET
 }
 
 export const githubKeys = {

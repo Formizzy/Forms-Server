@@ -23,7 +23,11 @@ router.post('/',
     }
 
     if (user.authMethod === "GOOGLE") {
-      res.status(404).json({ message: 'You were signed up using google.' });
+      res.status(404).json({ message: 'You were signed up using Google.' });
+      return
+    }
+    if (user.authMethod === "GITHUB") {
+      res.status(404).json({ message: 'You were signed up using Github.' });
       return
     }
 
