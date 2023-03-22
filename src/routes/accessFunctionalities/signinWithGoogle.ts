@@ -26,7 +26,7 @@ router.post('/signin-with-google',
 		const elementsFromFullName = name.split(' ');
 
 		// create a new user
-		const newUser : User = await UserRepo.createUser(
+		const newUser: User = await UserRepo.createUser(
 			{
 				email: email,
 				firstName: elementsFromFullName[0] ?? "",
