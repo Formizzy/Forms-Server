@@ -14,7 +14,7 @@ router.use('/signup', signup);
 router.use('/login', login);
 router.use('/logout', logout);
 router.use('/secure', secure);
-router.use('/createForm', createForm);
+router.use('/create-form', createForm);
 router.use('/signin-with-google', googleSignIn);
 router.use('/signin-with-github', githubSignIn);
 router.use('/submit-form', submitForm)
