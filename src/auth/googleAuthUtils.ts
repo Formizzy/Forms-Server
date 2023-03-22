@@ -22,7 +22,7 @@ export const getGoogleOauthToken = async ({
         code,
         client_id: googleKeys.clientId,
         client_secret: googleKeys.secretKey,
-        redirect_uri: "http://localhost:3000/api/auth/callback/google",
+        redirect_uri: googleKeys.redirectUrl,
         grant_type: 'authorization_code',
     };
     try {

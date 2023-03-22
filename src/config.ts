@@ -27,7 +27,8 @@ export const secretKey = process.env.SECRET_KEY || "temp_secret_key";
 
 export const googleKeys = {
   clientId: process.env.GOOGLE_CLIENT_ID,
-  secretKey: process.env.GOOGLE_CLIENT_SECRET
+  secretKey: process.env.GOOGLE_CLIENT_SECRET,
+  redirectUrl: process.env.GOOGLE_REDIRECT_URL
 }
 
 export const githubKeys = {

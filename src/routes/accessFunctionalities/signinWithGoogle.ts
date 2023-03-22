@@ -21,19 +21,32 @@ router.get('/',
 			const { id_token, access_token } = await getGoogleOauthToken({ code });
 
 			// Use the token to get the User
-			const data = await getGoogleUser({
+			const { email, given_name, family_name } = await getGoogleUser({
 				id_token,
 				access_token,
 			});
 
-			console.log(data);
-			res.cookie('email', data.email)
+			let user: User = await UserRepo.findByEmail(email);
 
+			if (!user) {
+				const newUser: User = await UserRepo.createUser({
+					email: email,
+					firstName: given_name ?? null,
+					lastName: family_name ?? null,
+					password: null,
+					authMethod: "GOOGLE",
+				} as User);
 
-			res.redirect(`http://localhost:3001${pathUrl}`);
+				user = newUser
+			}
+
+			const jwtToken = createTokens(user._id.toString(), secretKey);
+			res.cookie("session-token", jwtToken)
+
+			res.redirect(`http://localhost:3000${pathUrl}`);
 		} catch (err: any) {
 			console.log('Failed to authorize Google User', err);
-			return res.redirect(`http://localhost:3001/oauth/error`);
+			return res.redirect(`http://localhost:3000/oauth/error`);
 		}
 	},
 );
