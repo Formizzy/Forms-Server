@@ -6,6 +6,7 @@ import secure from './accessFunctionalities/secure';
 import createForm from './forms/createForm';
 import googleSignIn from './accessFunctionalities/signinWithGoogle';
 import githubSignIn from './accessFunctionalities/signinWithGithub';
+import { userProfile } from './accessFunctionalities/userProfile';
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.use('/secure', secure);
 router.use('/createForm', createForm);
 router.use('/api/auth/callback/google', googleSignIn);
 router.use('/signin-with-github', githubSignIn)
+router.use('/get-user-profile', userProfile)
 
 export default router;
