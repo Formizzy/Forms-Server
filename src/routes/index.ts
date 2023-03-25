@@ -7,6 +7,7 @@ import createForm from './forms/createForm';
 import googleSignIn from './accessFunctionalities/signinWithGoogle';
 import githubSignIn from './accessFunctionalities/signinWithGithub';
 import { userProfile } from './accessFunctionalities/userProfile';
+import submitForm from './forms/submitForm';
 
 const router = express.Router();
 

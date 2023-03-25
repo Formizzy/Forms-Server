@@ -6,4 +6,8 @@ export default {
     totalSubmissions: Joi.number().required(),
     endpoint: Joi.string().required(),
   }),
-};
+  submitForm: Joi.object().keys({
+    userId: Joi.string().required(),
+    formData: Joi.object().required().allow({}),
+  })
+}
