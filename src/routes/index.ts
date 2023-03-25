@@ -15,7 +15,7 @@ router.use('/login', login);
 router.use('/logout', logout);
 router.use('/secure', secure);
 router.use('/createForm', createForm);
-router.use('/signin-with-google', googleSignIn);
+router.use('/oauth/callback/google', googleSignIn);
 router.use('/signin-with-github', githubSignIn)
 router.use('/get-user-profile', userProfile)
 

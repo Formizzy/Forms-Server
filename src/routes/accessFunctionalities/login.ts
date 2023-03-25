@@ -23,7 +23,11 @@ router.post('/',
     }
 
     if (user.authMethod === "GOOGLE") {
-      res.status(404).json({ message: 'You were signed up using google.' });
+      res.status(404).json({ message: 'You were signed up using Google.' });
+      return
+    }
+    if (user.authMethod === "GITHUB") {
+      res.status(404).json({ message: 'You were signed up using Github.' });
       return
     }
 
@@ -31,7 +35,7 @@ router.post('/',
       throw Error("Password not found from database.")
     }
 
-    const match = bcrypt.compare(req.body.password, user.password);
+    const match = await bcrypt.compare(req.body.password, user.password);
 
     if (!match) {
       res.status(404).json({ message: 'password is incorrect' });
