@@ -36,7 +36,7 @@ router.get('/',
 					password: null,
 					authMethod: "GOOGLE",
 				} as User);
-
+				await switchDatabases(newUser._id.toString(), userDbSchemas);
 				user = newUser
 			}
 
