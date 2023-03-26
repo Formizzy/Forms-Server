@@ -1,6 +1,5 @@
 import Jwt, { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";
-import User from "../database/model/User";
 
 export const validateTokenData = (payload: JwtPayload): boolean => {
   if (
@@ -20,7 +19,7 @@ export const createTokens = (
   const jwtToken = Jwt.sign(
     { id: userId },
     accessTokenKey,
-    { expiresIn: '10 days' }
+    { expiresIn: '1h' }
   );
   return jwtToken;
 };

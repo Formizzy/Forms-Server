@@ -6,6 +6,7 @@ import secure from './accessFunctionalities/secure';
 import createForm from './forms/createForm';
 import googleSignIn from './accessFunctionalities/signinWithGoogle';
 import githubSignIn from './accessFunctionalities/signinWithGithub';
+import { userProfile } from './accessFunctionalities/userProfile';
 import submitForm from './forms/submitForm';
 
 const router = express.Router();
@@ -14,9 +15,10 @@ router.use('/signup', signup);
 router.use('/login', login);
 router.use('/logout', logout);
 router.use('/secure', secure);
+router.use('/oauth/callback/google', googleSignIn);
+router.use('/signin-with-github', githubSignIn)
+router.use('/get-user-profile', userProfile)
 router.use('/create-form', createForm);
-router.use('/signin-with-google', googleSignIn);
-router.use('/signin-with-github', githubSignIn);
 router.use('/submit-form', submitForm)
 
 export default router;

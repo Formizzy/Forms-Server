@@ -4,43 +4,50 @@ import { googleKeys, secretKey } from "../../config";
 import UserRepo from "../../database/repositories/UserRepo";
 import { createTokens } from "../../auth/authUtils";
 import User from "../../database/model/User";
-
-const client = new OAuth2Client(googleKeys.clientId);
+import { switchDatabases } from "../../database/helpers/switcher";
+import { userDbSchemas } from "../../database/model/MultiDatabase";
+import { getGoogleOauthToken, getGoogleUser } from "../../auth/googleAuthUtils";
 
 const router = express.Router();
 
-router.post('/signin-with-google',
+router.get('/',
 	async (req: Request, res: Response) => {
+		try {
+			// Get the code from the query
+			const code = req.query.code as string;
+			const pathUrl = (req.query.state as string) || '/';
 
-		const email = req.body.user.email;
-		const name = req.body.user.name;
+			// Use the code to get the id and access tokens
+			const { id_token, access_token } = await getGoogleOauthToken({ code });
 
-		const user: User = await UserRepo.findByEmail(email);
+			// Use the token to get the User
+			const { email, given_name, family_name } = await getGoogleUser({
+				id_token,
+				access_token,
+			});
 
-		if (user) {
+			let user: User = await UserRepo.findByEmail(email);
+
+			if (!user) {
+				const newUser: User = await UserRepo.createUser({
+					email: email,
+					firstName: given_name ?? null,
+					lastName: family_name ?? null,
+					password: null,
+					authMethod: "GOOGLE",
+				} as User);
+
+				user = newUser
+			}
+
 			const jwtToken = createTokens(user._id.toString(), secretKey);
-			res.status(201).json({ message: "User Signed In....\n", userAlreadyExists: user, jwtToken });
-			return;
+			res.cookie("session-token", jwtToken)
+
+			res.redirect(`http://localhost:3000${pathUrl}`);
+		} catch (err: any) {
+			console.log('Failed to authorize Google User', err);
+			return res.redirect(`http://localhost:3000/oauth/error`);
 		}
-
-		const elementsFromFullName = name.split(' ');
-
-		// create a new user
-		const newUser : User = await UserRepo.createUser(
-			{
-				email: email,
-				firstName: elementsFromFullName[0] ?? "",
-				lastName: elementsFromFullName[1] ?? "",
-				password: null,
-				authMethod: "GOOGLE"
-			} as User,
-		);
-
-		const jwtToken = createTokens(newUser._id.toString(), secretKey);
-
-		// return the user and access token
-
-		res.status(201).send({ message: "User Registerd Successfully....\n", user, jwtToken });
 	},
 );
 
