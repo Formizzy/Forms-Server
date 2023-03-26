@@ -6,16 +6,20 @@ import FormRepo from "../../database/repositories/FormRepo";
 
 const router = express.Router();
 
-//Authentication is done firstly before providing the submitForm functinality.
-router.use(authentication);
-
 router.post('/',
     validator(schema.submitForm),
     async (req: Request, res: Response) => {
         try {
-            const { formData, userId } = req.body;
+            const formData = req.body;
+            const reqParams = req.query.endpoint?.toString();
+            const idArray = reqParams?.split("-");
+            if (!idArray || idArray.length === 0) {
+                throw "User Credentials Are Not Appropriate";
+            }
+            const userId = idArray[0];
+            const formId = idArray[1];
 
-            const submittedForm = await FormRepo.submitForm(formData, userId.toString());
+            const { submittedForm } = await FormRepo.submitForm(formData, formId, userId);
 
             res.status(201).json({ message: "Form Submitted Successfully\n", submittedForm })
         } catch (error) {

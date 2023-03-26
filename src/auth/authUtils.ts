@@ -5,8 +5,8 @@ import User from "../database/model/User";
 export const validateTokenData = (payload: JwtPayload): boolean => {
   if (
     !payload ||
-    !payload._id ||
-    !Types.ObjectId.isValid(payload._id)
+    !payload.id ||
+    !Types.ObjectId.isValid(payload.id)
   ) {
     return false;
   }

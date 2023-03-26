@@ -1,5 +1,4 @@
-import { model, Schema, Types } from 'mongoose';
-import Form from './Form';
+import { Schema, Types } from 'mongoose';
 
 
 export default interface User {

@@ -31,7 +31,7 @@ router.post('/',
       throw Error("Password not found from database.")
     }
 
-    const match = bcrypt.compare(req.body.password, user.password);
+    const match = await bcrypt.compare(req.body.password, user.password);
 
     if (!match) {
       res.status(404).json({ message: 'password is incorrect' });

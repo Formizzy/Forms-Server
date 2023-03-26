@@ -7,9 +7,9 @@ import { Types } from 'mongoose';
 // // contains critical information of the user
 async function findById(id: Types.ObjectId): Promise<User | any> {
 
-  let materDBConnection = await switchDatabases('masterDB', masterDbSchemas);
+  let masterDBConnection = await switchDatabases('masterDB', masterDbSchemas);
 
-  const userModel = await getDBModel(materDBConnection, 'user');
+  const userModel = await getDBModel(masterDBConnection, 'user');
 
   const result = await userModel?.findOne({ _id: id })
     .lean()
@@ -20,9 +20,9 @@ async function findById(id: Types.ObjectId): Promise<User | any> {
 
 async function findByEmail(email: string): Promise<User | any> {
 
-  let materDBConnection = await switchDatabases('masterDB', masterDbSchemas);
+  let masterDBConnection = await switchDatabases('masterDB', masterDbSchemas);
 
-  const userModel = await getDBModel(materDBConnection, 'user');
+  const userModel = await getDBModel(masterDBConnection, 'user');
 
   const result = await userModel?.findOne({ email: email })
     .select(
@@ -38,9 +38,9 @@ async function createUser(
   user: User | any,
 ): Promise<User> {
 
-  let materDBConnection = await switchDatabases('masterDB', masterDbSchemas);
+  let masterDBConnection = await switchDatabases('masterDB', masterDbSchemas);
 
-  const userModel = await getDBModel(materDBConnection, 'user');
+  const userModel = await getDBModel(masterDBConnection, 'user');
 
   const now = new Date();
 

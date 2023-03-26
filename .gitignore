@@ -106,4 +106,8 @@ dist
 
 .oci
 .vscode
+.idea/
 build
+
+package-lock.json
+yarn.lock

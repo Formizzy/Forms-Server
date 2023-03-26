@@ -19,15 +19,15 @@ export default router.use(
       const jwtPayload = Jwt.verify(jwtAuthToken as string, secretKey) as JwtPayload;
       const isTokenPayloadRight = validateTokenData(jwtPayload);
 
-      if(!isTokenPayloadRight) throw 'Invalid Access Token';
-      if (jwtPayload._id.toString() != userIdFromQuery) throw 'Token Does Not Match With User';
+      if (!isTokenPayloadRight) throw 'Invalid Access Token';
+      if (jwtPayload.id.toString() != userIdFromQuery) throw 'Token Does Not Match With User';
 
-      const user = await UserRepo.findById(jwtPayload._id as mongoose.Types.ObjectId);
+      const user = await UserRepo.findById(jwtPayload.id as mongoose.Types.ObjectId);
       if (!user) throw 'User Not Found';
       
       return next();
     } catch (error) {
-      return res.status(401).json({message : error});
+      return res.status(401).json({ message: error });
     }
   }
 );
