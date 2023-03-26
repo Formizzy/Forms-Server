@@ -1,5 +1,4 @@
-import express, { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken'
+import express from 'express';
 import signup from './accessFunctionalities/signup';
 import login from './accessFunctionalities/login';
 import logout from './accessFunctionalities/logout';
