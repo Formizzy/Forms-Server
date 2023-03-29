@@ -1,4 +1,4 @@
-import { Connection } from 'mongoose';
+import mongoose, { Connection, mongo, Mongoose, Types } from 'mongoose';
 import { getDBModel } from '../helpers/getModel';
 import { makeModelsFromSchema, switchDatabases } from '../helpers/switcher';
 import Form from '../model/Form';
@@ -45,19 +45,55 @@ const submitForm = async function (formData: SubmittedForm, formId: string, user
 
   const submittedForm = await submittedFormModel.create(submittedFormRecord);
 
+  // const pipeline = [
+  //   {
+  //     $match: { operationType: { $in: ['insert'] } },
+  //   }
+  // ];
+
+  // const changeStream = submittedFormModel.watch(pipeline);
+  // changeStream.on('change', async (next) => {
+  //   console.log(next);
+  //   const formModel = await getDBModel(userDBConnection, 'form');
+  //   const result = await formModel.updateOne({ _id: formId },{ $inc: { totalSubmissions: 1 }}).lean();
+  // });
+
+  if (submittedForm)
+  {
+    const criteria : Record<string, any> = {};
+    criteria._id = new mongoose.Types.ObjectId(formId.toString());
+
+    const parametersToUpdate = {
+      $inc: { "totalSubmissions" : 1 }
+    }
+    const form = await findOneAndUpdateForm(criteria, parametersToUpdate, userDBName);
+
+    return form;
+  }
+
   return {
     submittedForm
   }
 }
 
-const getAllForms = async function (userDBName: string, connection: Connection): Promise<Object> {
+const getFormsByCriteria = async function (connection: Connection, criteria: Object = {}) {
   const formModel = await getDBModel(connection, 'form');
-  const result = await formModel.find().lean();
+  const result = await formModel.find(criteria).lean();
+  return result;
+}
+
+const findOneAndUpdateForm = async function (criteria: Object, parametersToUpdate: Object, userDBName: string) {
+  const userDBConnection : Connection = await switchDatabases(userDBName, userDbSchemas);
+  const formModel = await getDBModel(userDBConnection, 'form');
+
+  const result = await formModel.findOneAndUpdate(criteria, parametersToUpdate).lean();
+
   return result;
 }
 
 export default {
   createForm,
   submitForm,
-  getAllForms,
+  getFormsByCriteria,
+  findOneAndUpdateForm,
 };

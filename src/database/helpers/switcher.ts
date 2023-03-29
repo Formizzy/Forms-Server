@@ -18,7 +18,7 @@ export const switchDatabases = async function ( dbName : string, dbSchema : Map<
       }
       if (Object.keys(connectionWithDb.models).length === 1 && connectionWithDb.models.form)
       {
-        const allFormsOfUser = await FormRepo.getAllForms(dbName, connectionWithDb);
+        const allFormsOfUser = await FormRepo.getFormsByCriteria(connectionWithDb);
         Object(allFormsOfUser).forEach((form : any) => {
           makeModelsFromSchema(form._id.toString(), submitFormSchema, connectionWithDb);
         })
