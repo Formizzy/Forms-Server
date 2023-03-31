@@ -13,12 +13,12 @@ router.use(authentication);
 router.post('/', 
     validator(schema.createForm),
     async (req : Request, res : Response) => {
-        const userId = res.locals.userId as string;
+        const userId = res.locals.userId.toString();
         const { form } = await FormRepo.createForm({
           formName : req.body.formName,
           totalSubmissions : req.body.totalSubmissions,
           endpoint : userId,
-        } as Form, userId);
+        } as Form, userId as string);
 
         res.status(201).json({ message: "Form Created Successfully\n", form })
     },

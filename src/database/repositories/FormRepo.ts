@@ -45,19 +45,6 @@ const submitForm = async function (formData: SubmittedForm, formId: string, user
 
   const submittedForm = await submittedFormModel.create(submittedFormRecord);
 
-  // const pipeline = [
-  //   {
-  //     $match: { operationType: { $in: ['insert'] } },
-  //   }
-  // ];
-
-  // const changeStream = submittedFormModel.watch(pipeline);
-  // changeStream.on('change', async (next) => {
-  //   console.log(next);
-  //   const formModel = await getDBModel(userDBConnection, 'form');
-  //   const result = await formModel.updateOne({ _id: formId },{ $inc: { totalSubmissions: 1 }}).lean();
-  // });
-
   if (submittedForm)
   {
     const criteria : Record<string, any> = {};
@@ -67,12 +54,10 @@ const submitForm = async function (formData: SubmittedForm, formId: string, user
       $inc: { "totalSubmissions" : 1 }
     }
     const form = await findOneAndUpdateForm(criteria, parametersToUpdate, userDBName);
-
-    return form;
   }
 
   return {
-    submittedForm
+    submittedForm : submittedForm.formData[0]
   }
 }
 
