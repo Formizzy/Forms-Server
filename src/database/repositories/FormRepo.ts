@@ -17,6 +17,11 @@ const createForm = async function (form: Form, userDBName : string): Promise<{ f
 
   const createdForm = await formModel.create(form);
 
+    // ////Refctoring using function is possible!!
+    // //for creating index in collection....
+    // userDBConnection.collection("form").createIndex({ createdAt: 1})
+
+
   const result = await formModel.findByIdAndUpdate(
       { _id : createdForm._id },
       { $set : { endpoint : (userId + "-" + createdForm._id).toString() }},
@@ -45,6 +50,10 @@ const submitForm = async function (formData: SubmittedForm, formId: string, user
 
   const submittedForm = await submittedFormModel.create(submittedFormRecord);
 
+    // ////Refctoring using function is possible!!
+    // //for creating index in collection....
+    // userDBConnection.collection(formId.toString()).createIndex({ createdAt: 1})
+  
   if (submittedForm)
   {
     const criteria : Record<string, any> = {};
