@@ -27,8 +27,7 @@ router.post("/", async (req: Request, res: Response) => {
   // create a new user
   const newUser: User = await UserRepo.createUser({
     email: email,
-    firstName: name[0] ?? null,
-    lastName: name[1] ?? null,
+    name: name,
     password: null,
     authMethod: "GITHUB",
   } as User);

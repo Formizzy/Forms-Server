@@ -31,8 +31,7 @@ router.get('/',
 			if (!user) {
 				const newUser: User = await UserRepo.createUser({
 					email: email,
-					firstName: given_name ?? null,
-					lastName: family_name ?? null,
+					name: given_name,
 					password: null,
 					authMethod: "GOOGLE",
 				} as User);

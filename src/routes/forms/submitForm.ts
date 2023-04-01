@@ -6,12 +6,12 @@ import FormRepo from "../../database/repositories/FormRepo";
 
 const router = express.Router();
 
-router.post('/',
+router.post('/:endpoint',
     validator(schema.submitForm),
     async (req: Request, res: Response) => {
         try {
             const formData = req.body;
-            const reqParams = req.query.endpoint?.toString();
+            const reqParams = req.params.endpoint?.toString();
             const idArray = reqParams?.split("-");
             if (!idArray || idArray.length === 0) {
                 throw "User Credentials Are Not Appropriate";

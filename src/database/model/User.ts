@@ -5,9 +5,10 @@ export default interface User {
   _id: Types.ObjectId;
   email?: string;
   password: string | null;
-  firstName: string;
-  lastName: string;
+  name: string;
   authMethod: "GOOGLE" | "GITHUB" | "EMAIL";
+  refreshToken: string;
+  profileImage: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -22,17 +23,19 @@ export const userSchema = new Schema<User>(
       type: Schema.Types.String,
       select: false
     },
-    firstName: {
-      type: Schema.Types.String,
-      default: "",
-    },
-    lastName: {
+    name: {
       type: Schema.Types.String,
       default: "",
     },
     authMethod: {
       type: Schema.Types.String,
       default: "EMAIL"
+    },
+    refreshToken: {
+      type: Schema.Types.String,
+    },
+    profileImage: {
+      type: Schema.Types.String,
     },
     createdAt: {
       type: Schema.Types.Date,

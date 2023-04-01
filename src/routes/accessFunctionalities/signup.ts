@@ -19,7 +19,7 @@ router.post('/',
   async (req: Request, res: Response) => {
     try {
 
-      const { firstName, lastName, email, password } = req.body;
+      const { name, email, password } = req.body;
 
       const userAlreadyExists = await UserRepo.findByEmail(email);
 
@@ -27,7 +27,7 @@ router.post('/',
       if (userAlreadyExists) return res.status(403).json({ message: 'User Alredy Exists' });
 
       // validate input data according to SignUpUserModel
-      if (!firstName || !lastName || !email || !password) {
+      if (!name || !email || !password) {
         return res.status(400).json({ message: 'Invalid data' });
       }
 
@@ -39,8 +39,7 @@ router.post('/',
         {
           email: email,
           password: hashedPassword,
-          firstName: firstName,
-          lastName: lastName,
+          name: name,
           authMethod: "EMAIL"
         } as User,
       );

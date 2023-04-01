@@ -31,5 +31,6 @@ export const switchDatabases = async function ( dbName : string, dbSchema : Map<
 }
 
 export const makeModelsFromSchema = function (dbName: string, dbSchema: mongoose.Schema, connectionWithDb: mongoose.Connection) {
-  connectionWithDb.model(dbName as string, dbSchema);
+  //third parameter is for following strict name mod in mongo
+  connectionWithDb.model(dbName as string, dbSchema, dbName);
 }
