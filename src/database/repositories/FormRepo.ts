@@ -1,4 +1,4 @@
-import { Connection } from 'mongoose';
+import mongoose, { Connection, mongo, Mongoose, Types } from 'mongoose';
 import { getDBModel } from '../helpers/getModel';
 import { makeModelsFromSchema, switchDatabases } from '../helpers/switcher';
 import Form from '../model/Form';
@@ -16,6 +16,11 @@ const createForm = async function (form: Form, userDBName : string): Promise<{ f
   form.createdAt = form.updatedAt = new Date();
 
   const createdForm = await formModel.create(form);
+
+    // ////Refctoring using function is possible!!
+    // //for creating index in collection....
+    // userDBConnection.collection("form").createIndex({ createdAt: 1})
+
 
   const result = await formModel.findByIdAndUpdate(
       { _id : createdForm._id },
@@ -45,19 +50,44 @@ const submitForm = async function (formData: SubmittedForm, formId: string, user
 
   const submittedForm = await submittedFormModel.create(submittedFormRecord);
 
+    // ////Refctoring using function is possible!!
+    // //for creating index in collection....
+    // userDBConnection.collection(formId.toString()).createIndex({ createdAt: 1})
+  
+  if (submittedForm)
+  {
+    const criteria : Record<string, any> = {};
+    criteria._id = new mongoose.Types.ObjectId(formId.toString());
+
+    const parametersToUpdate = {
+      $inc: { "totalSubmissions" : 1 }
+    }
+    const form = await findOneAndUpdateForm(criteria, parametersToUpdate, userDBName);
+  }
+
   return {
-    submittedForm
+    submittedForm : submittedForm.formData[0]
   }
 }
 
-const getAllForms = async function (userDBName: string, connection: Connection): Promise<Object> {
+const getFormsByCriteria = async function (connection: Connection, criteria: Object = {}) {
   const formModel = await getDBModel(connection, 'form');
-  const result = await formModel.find().lean();
+  const result = await formModel.find(criteria).lean();
+  return result;
+}
+
+const findOneAndUpdateForm = async function (criteria: Object, parametersToUpdate: Object, userDBName: string) {
+  const userDBConnection : Connection = await switchDatabases(userDBName, userDbSchemas);
+  const formModel = await getDBModel(userDBConnection, 'form');
+
+  const result = await formModel.findOneAndUpdate(criteria, parametersToUpdate).lean();
+
   return result;
 }
 
 export default {
   createForm,
   submitForm,
-  getAllForms,
+  getFormsByCriteria,
+  findOneAndUpdateForm,
 };
