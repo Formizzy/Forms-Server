@@ -8,6 +8,7 @@ import schema from "./schema"
 import { secretKey } from "../../config";
 import UserRepo from "../../database/repositories/UserRepo";
 import { createTokens } from "../../auth/authUtils";
+import { getUserForResponse } from "../../helpers/objConverter";
 
 const router = express.Router();
 
@@ -44,8 +45,11 @@ router.post('/',
 
     const jwtToken = createTokens(user._id.toString(), secretKey);
 
-    res.status(201).json({ message: "User Logged In....\n", user, jwtToken });
+    const objForResponse: Object = getUserForResponse(user);
+
+    res.status(201).json({ message: "User Logged In....\n", objForResponse, jwtToken });
   },
 );
 
 export default router;
+

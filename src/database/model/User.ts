@@ -48,4 +48,12 @@ export const userSchema = new Schema<User>(
       select: false,
     },
   },
+  {
+    toObject: {
+      transform: function (document, returnValue) {
+        delete returnValue.__v;
+        delete returnValue.password;
+      }
+    }
+  }
 );
