@@ -1,4 +1,6 @@
 import * as dotenv from 'dotenv'
+import crypto from 'crypto'
+
 dotenv.config();
 
 export const environment = process.env.NODE_ENV;
@@ -22,8 +24,21 @@ export const tokenInfo = {
   audience: process.env.TOKEN_AUDIENCE || '',
 };
 
-
 export const secretKey = process.env.SECRET_KEY || "temp_secret_key";
+
+export const encryptionKeyForUserVerification = crypto.randomBytes(32)
+
+export const initializationVectorForUserVerification = crypto.randomBytes(12)
+
+export const userVerificationSecret = process.env.SECRET_KEY_FOR_USER_VERIFICATION || "temp_secret_key";
+
+export const currentUrl = process.env.CURRENT_WORKING_URL || "http://localhost:3001/";
+
+export const authEmail = process.env.AUTHORIZATION_EMAIL || "190420107011.co19s1@scet.ac.in";
+
+export const authPassword = process.env.AUTHORIZATION_PASSWORD || "xedrmdyxfyofftxu";
+
+export const orgEmailId = process.env.ORGANIZATION_EMAIL || "190420107011.co19s1@scet.ac.in";
 
 export const googleKeys = {
   clientId: process.env.GOOGLE_CLIENT_ID,

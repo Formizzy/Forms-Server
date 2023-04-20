@@ -9,6 +9,7 @@ export default interface User {
   authMethod: "GOOGLE" | "GITHUB" | "EMAIL";
   refreshToken: string;
   profileImage: string;
+  isEmailVerified: Boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -36,6 +37,10 @@ export const userSchema = new Schema<User>(
     },
     profileImage: {
       type: Schema.Types.String,
+    },
+    isEmailVerified: {
+      type: Schema.Types.Boolean,
+      default: false,
     },
     createdAt: {
       type: Schema.Types.Date,

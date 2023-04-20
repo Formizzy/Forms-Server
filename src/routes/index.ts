@@ -8,6 +8,7 @@ import googleSignIn from './accessFunctionalities/signinWithGoogle';
 import githubSignIn from './accessFunctionalities/signinWithGithub';
 import { userProfile } from './accessFunctionalities/userProfile';
 import submitForm from './forms/submitForm';
+import userVerification from './accessFunctionalities/userVerification';
 
 const router = express.Router();
 
@@ -20,5 +21,8 @@ router.use('/signin-with-github', githubSignIn)
 router.use('/get-user-profile', userProfile)
 router.use('/create-form', createForm);
 router.use('/submit-form', submitForm)
+
+//Verify User Email
+router.use('/user/verify', userVerification)
 
 export default router;

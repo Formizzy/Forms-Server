@@ -22,6 +22,7 @@ export default router.use(
 
       const user = await UserRepo.findById(jwtPayload.id as mongoose.Types.ObjectId);
       if (!user) throw 'User Not Found';
+      if (!user.isEmailVerified) throw 'Email Verification Pending';
 
       res.locals.user = user
       res.locals.userId = user._id
