@@ -3,6 +3,7 @@ import { masterDbSchemas } from '../model/MultiDatabase';
 import { switchDatabases } from '../helpers/switcher';
 import { getDBModel } from '../helpers/getModel';
 import { Types } from 'mongoose';
+import { sendVerificationEmail } from '../helpers/verifcationEmailSender';
 
 // // contains critical information of the user
 async function findById(id: Types.ObjectId): Promise<User | any> {
@@ -50,11 +51,29 @@ async function createUser(
 
   const createdUser: User = await userModel?.create(user);
 
+  sendVerificationEmail(createdUser);
+  
   return createdUser
+}
+
+//user email verification
+
+async function verifyUserEmail(
+  user: User | any,
+): Promise<User> {
+
+  let masterDBConnection = await switchDatabases('masterDB', masterDbSchemas);
+
+  const userModel = await getDBModel(masterDBConnection, 'user');
+
+  const verifiedUser = await userModel?.findOneAndUpdate(user._id, { isEmailVerified: true }, { new: true }).lean();
+
+  return verifiedUser;
 }
 
 export default {
   findById,
   findByEmail,
   createUser,
+  verifyUserEmail
 };
