@@ -8,6 +8,7 @@ import { secretKey } from "../../config";
 import { createTokens } from "../../auth/authUtils";
 import { userDbSchemas } from "../../database/model/MultiDatabase";
 import { switchDatabases } from "../../database/helpers/switcher";
+import { getUserForResponse } from "../../helpers/objConverter";
 
 const router = express.Router();
 
@@ -49,8 +50,10 @@ router.post('/',
       console.log(jwtToken)
       await switchDatabases(newUser._id.toString(), userDbSchemas);
 
+      const objForResponse: Object = getUserForResponse(newUser);
+
       // return the user and access token
-      res.status(201).json({ message: "User Registerd Successfully....\n", newUser, jwtToken });
+      res.status(201).json({ message: "User Registerd Successfully....\n", objForResponse});
     } catch (error) {
       res.status(500).json({ message: 'Internal server error', error });
     }
